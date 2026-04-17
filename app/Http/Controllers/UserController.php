@@ -30,7 +30,7 @@ class UserController extends Controller
             'email'    => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'prodi_id' => 'required|exists:prodis,id',
-            // 'role' => 'required|string' // Buka ini kalau kamu punya kolom role di tabel users
+            'role' => 'required|string' // Buka ini kalau kamu punya kolom role di tabel users
         ]);
 
         User::create([
@@ -38,6 +38,7 @@ class UserController extends Controller
             'email'    => $request->email,
             'password' => Hash::make($request->password),
             'prodi_id' => $request->prodi_id,
+            'role' => $request->role
         ]);
 
         return redirect()->route('users.index')->with('success', 'Pengguna baru berhasil ditambahkan.');
@@ -59,12 +60,14 @@ class UserController extends Controller
             'email'    => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8', // Boleh kosong
             'prodi_id' => 'required|exists:prodis,id',
+            'role' => 'required|string' // Buka ini kalau kamu punya kolom role di tabel users
         ]);
 
         $data = [
             'name'     => $request->name,
             'email'    => $request->email,
             'prodi_id' => $request->prodi_id,
+            'role' => $request->role
         ];
 
         // Hanya update password jika form password diisi

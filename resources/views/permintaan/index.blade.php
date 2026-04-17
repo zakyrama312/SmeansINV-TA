@@ -1,3 +1,6 @@
+@php
+use Illuminate\Support\Facades\Auth;
+@endphp
 <x-app-layout>
     <div x-data="{ openRejectModal: false, rejectUrl: '' }" class="py-8 bg-gray-50 min-h-screen relative">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -128,7 +131,10 @@
                                 <th class="py-4 px-4 font-semibold">Tanggal</th>
                                 <th class="py-4 px-4 font-semibold text-center">Status</th>
                                 <th class="py-4 px-4 font-semibold w-48">Keterangan</th>
-                                <th class="py-4 px-4 font-semibold text-right">Aksi</th>
+                                @if (Auth::user()->role === 'teknisi')
+
+                                <th class="py-4 px-4 font-semibold text-center">Aksi</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
@@ -208,7 +214,7 @@
                                         {{ $item->keterangan ?? '-' }}
                                     </div>
                                 </td>
-
+                                @if (Auth::user()->role === 'teknisi')
                                 <td class="py-4 px-4 text-right">
                                     <div class="flex items-center justify-end gap-2">
                                         @if($item->status == 'pending')
@@ -262,6 +268,8 @@
                                         @endif
                                     </div>
                                 </td>
+                                @endif
+
                             </tr>
                             @empty
                             <tr>

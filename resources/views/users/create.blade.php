@@ -5,7 +5,7 @@
             <div class="flex justify-between items-start mb-6">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-900">Tambah Pengguna</h2>
-                    <p class="text-sm text-gray-500 mt-1">Buat akun baru untuk admin atau teknisi laboratorium</p>
+                    <p class="text-sm text-gray-500 mt-1">Buat akun baru untuk admin, kaprodi, atau peminjam</p>
                 </div>
                 <a href="{{ route('users.index') }}"
                     class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg font-semibold text-sm text-gray-700 hover:bg-gray-50 shadow-sm transition">
@@ -76,10 +76,22 @@
                         </div>
 
                         <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Role Hak Akses <span
+                                    class="text-red-500">*</span></label>
+                            <select name="role" required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition">
+                                <option value="" disabled selected>-- Pilih Role Akses --</option>
+                                <option value="teknisi" {{ old('role') == 'teknisi' ? 'selected' : '' }}>Admin / Teknisi Lab</option>
+                                <option value="kaprodi" {{ old('role') == 'kaprodi' ? 'selected' : '' }}>Kepala Program Studi</option>
+                                <option value="peminjam" {{ old('role') == 'peminjam' ? 'selected' : '' }}>Siswa / Peminjam</option>
+                            </select>
+                        </div>
+
+                        <div class="md:col-span-2">
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Penempatan Prodi/Lab <span
                                     class="text-red-500">*</span></label>
                             <select name="prodi_id" required
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition">
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition md:w-1/2">
                                 <option value="" disabled selected>-- Pilih Program Studi --</option>
                                 @foreach($prodis as $prodi)
                                 <option value="{{ $prodi->id }}" {{ old('prodi_id') == $prodi->id ? 'selected' : '' }}>

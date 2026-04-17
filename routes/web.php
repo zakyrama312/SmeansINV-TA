@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function () {
 
     // Route Barang
     Route::resource('barang', BarangController::class);
+    Route::get('/barang/{id}', [BarangController::class, 'show'])->name('barang.show');
+    Route::get('/barang/{id}', [BarangController::class, 'barcode'])->name('barang.barcode');
 
     // Laporan Data Ruang
     Route::get('/laporan/ruang/{slug}', [LaporanRuangController::class, 'show'])->name('laporan.ruang');
