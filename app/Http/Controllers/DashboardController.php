@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 // use Illuminate\Http\Request;
 use App\Models\Barang;
+use App\Models\DetailPermintaan;
 use App\Models\Peminjaman;
 use App\Models\Permintaan;
 use App\Models\Kondisi;
@@ -20,18 +21,26 @@ class DashboardController extends Controller
         // LOGIKA UNTUK DASHBOARD SISWA / PEMINJAM
         // ========================================================
         if ($user->role === 'peminjam') {
-            // Asumsi: Kita mencocokkan nama_peminjam dengan nama user yang login
-            // (Jika kamu punya kolom user_id di tabel peminjaman, gunakan where('user_id', $user->id) )
-
+            // 1. Tarik Peminjaman Alat yang sedang dipinjam
             $pinjamanAktif = Peminjaman::with('details.barang')
-                ->where('nama_peminjam', $user->name)
+                ->where('prodi_id', $user->prodi_id)
                 ->where('status', 'dipinjam')
                 ->get();
 
-            $pinjamanPending = Peminjaman::where('nama_peminjam', $user->name)->where('status', 'pending')->count();
-            $permintaanPending = Permintaan::where('nama_peminta', $user->name)->where('status', 'pending')->count();
+            // 2. Tarik Bahan Habis Pakai yang statusnya Belum Habis
+            $bahanAktif = DetailPermintaan::with(['barang', 'permintaan'])
+                ->where('status_penggunaan', 'belum_habis')
+                ->whereHas('permintaan', function ($q) use ($user) {
+                    $q->where('prodi_id', $user->prodi_id)
+                        ->where('status', 'disetujui'); // Hanya tampil kalau sudah di-ACC Admin
+                })->latest()->get();
 
-            return view('dashboard-peminjam', compact('pinjamanAktif', 'pinjamanPending', 'permintaanPending'));
+            // 3. Hitung jumlah pengajuan yang masih pending
+            $pinjamanPending = Peminjaman::where('prodi_id', $user->prodi_id)->where('status', 'pending')->count();
+            $permintaanPending = Permintaan::where('prodi_id', $user->prodi_id)->where('status', 'pending')->count();
+
+            // PASTIKAN $bahanAktif ADA DI DALAM COMPACT DI BAWAH INI:
+            return view('dashboard-peminjam', compact('pinjamanAktif', 'bahanAktif', 'pinjamanPending', 'permintaanPending'));
         }
 
 
@@ -76,7 +85,6 @@ class DashboardController extends Controller
             }
         }
 
-        // Arahkan ke file view dashboard utama (dashboard.blade.php)
         return view('dashboard', compact(
             'totalBarang',
             'peminjamanAktif',

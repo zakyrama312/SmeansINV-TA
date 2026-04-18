@@ -40,11 +40,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/permintaan', [App\Http\Controllers\PermintaanController::class, 'store'])->name('permintaan.store');
     Route::patch('/permintaan/{id}/approve', [App\Http\Controllers\PermintaanController::class, 'approve'])->name('permintaan.approve');
     Route::patch('/permintaan/{id}/reject', [App\Http\Controllers\PermintaanController::class, 'reject'])->name('permintaan.reject');
+    Route::patch('/permintaan/lapor-habis/{id}', [\App\Http\Controllers\PermintaanController::class, 'laporHabis'])->name('permintaan.lapor_habis');
 
     // Route Barang
     Route::resource('barang', BarangController::class);
-    Route::get('/barang/{id}', [BarangController::class, 'show'])->name('barang.show');
-    Route::get('/barang/{id}', [BarangController::class, 'barcode'])->name('barang.barcode');
+    Route::get('/barang/detail/{kode_barang}', [BarangController::class, 'show'])->name('barang.show');
+    Route::get('/barang/barcode/{kode_barang}', [BarangController::class, 'barcode'])->name('barang.barcode');
 
     // Laporan Data Ruang
     Route::get('/laporan/ruang/{slug}', [LaporanRuangController::class, 'show'])->name('laporan.ruang');

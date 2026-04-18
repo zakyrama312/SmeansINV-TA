@@ -28,7 +28,7 @@ class UserController extends Controller
         $request->validate([
             'name'     => 'required|string|max:255',
             'email'    => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
+            'password' => 'required|string|min:6',
             'prodi_id' => 'required|exists:prodis,id',
             'role' => 'required|string' // Buka ini kalau kamu punya kolom role di tabel users
         ]);

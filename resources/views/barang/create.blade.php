@@ -46,7 +46,8 @@
                                 @foreach($kategoris as $kategori)
                                 <option value="{{ $kategori->id }}"
                                     {{ old('kategori_id') == $kategori->id ? 'selected' : '' }}>
-                                    {{ $kategori->nama_kategori }}</option>
+                                    {{ $kategori->nama_kategori }}
+                                </option>
                                 @endforeach
                             </select>
                             @error('kategori_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
@@ -60,7 +61,8 @@
                                 @foreach($kondisis as $kondisi)
                                 <option value="{{ $kondisi->id }}"
                                     {{ old('kondisi_id') == $kondisi->id ? 'selected' : '' }}>
-                                    {{ $kondisi->nama_kondisi }}</option>
+                                    {{ $kondisi->nama_kondisi }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
@@ -73,7 +75,8 @@
                                 <option value="">-- Pilih Ruang --</option>
                                 @foreach($ruangs as $ruang)
                                 <option value="{{ $ruang->id }}" {{ old('ruang_id') == $ruang->id ? 'selected' : '' }}>
-                                    {{ $ruang->nama_ruang }}</option>
+                                    {{ $ruang->nama_ruang }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
@@ -86,11 +89,13 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Kode Barang <span
-                                    class="text-red-500">*</span></label>
-                            <input type="text" name="kode_barang" value="{{ old('kode_barang') }}" required
-                                class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 shadow-sm"
-                                placeholder="Contoh: LPT-001">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Kode Barang <span class="text-xs text-blue-600 font-normal ml-1">(Otomatis)</span></label>
+
+                            <input type="text" name="kode_barang" value="{{ old('kode_barang', $kodeBarangOtomatis) }}" readonly
+                                class="bg-gray-100 border border-gray-300 text-gray-700 font-bold text-sm rounded-xl block w-full p-3 cursor-not-allowed"
+                                title="Kode dibuat otomatis oleh sistem">
+
+                            <p class="text-xs text-gray-500 mt-1.5 italic">Format: PRODI-TAHUNBULAN-URUTAN</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Merk</label>

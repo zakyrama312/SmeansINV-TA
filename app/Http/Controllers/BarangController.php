@@ -9,7 +9,7 @@ use App\Models\Kondisi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-
+use Carbon\Carbon; // Pastikan ini ada di bagian atas file
 class BarangController extends Controller
 {
     public function index()
@@ -19,15 +19,49 @@ class BarangController extends Controller
         return view('barang.index', compact('barangs'));
     }
 
+
+
     public function create()
     {
-        // Tarik data master HANYA untuk prodi teknisi yang sedang login
-        $prodi_id = Auth::user()->prodi_id;
-        $kategoris = Kategori::where('prodi_id', $prodi_id)->get();
-        $ruangs = Ruang::where('prodi_id', $prodi_id)->get();
-        $kondisis = Kondisi::where('prodi_id', $prodi_id)->get();
+        $user = auth()->user();
 
-        return view('barang.create', compact('kategoris', 'ruangs', 'kondisis'));
+        // 1. Buat Singkatan Prodi (Contoh: "Rekayasa Perangkat Lunak" otomatis jadi "RPL")
+        $namaProdi = $user->prodi->nama_prodi ?? 'LAB';
+        $singkatanProdi = '';
+        foreach (explode(' ', $namaProdi) as $word) {
+            $singkatanProdi .= strtoupper(substr($word, 0, 1));
+        }
+        $singkatanProdi = preg_replace('/[^A-Z]/', '', $singkatanProdi); // Bersihkan selain huruf
+
+        // 2. Format Tahun dan Bulan (Contoh: 202604)
+        $tahunBulan = Carbon::now()->format('Ym');
+
+        // 3. Cari barang terakhir yang diinput oleh prodi ini pada bulan ini
+        $lastBarang = Barang::where('prodi_id', $user->prodi_id)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        // 4. Penentuan Nomor Urut
+        if ($lastBarang && preg_match('/-(\d{4})$/', $lastBarang->kode_barang, $matches)) {
+            // Jika bulan ini sudah ada barang, urutannya ditambah 1
+            $urut = intval($matches[1]) + 1;
+        } else {
+            // Jika ini barang pertama di bulan tersebut, mulai dari 1
+            $urut = 1;
+        }
+
+        // 5. Rangkai kode finalnya (str_pad untuk bikin angka 1 jadi 0001)
+        $kodeBarangOtomatis = $singkatanProdi . '-' . $tahunBulan . '-' . str_pad($urut, 4, '0', STR_PAD_LEFT);
+
+        // Tarik data relasi untuk form (Sesuaikan dengan variabel yang sudah ada di kodemu)
+        $kategoris = Kategori::all();
+        $kondisis = Kondisi::all();
+        $ruangs = Ruang::where('prodi_id', $user->prodi_id)->get();
+
+        // Lempar variabel $kodeBarangOtomatis ke tampilan view
+        return view('barang.create', compact('kodeBarangOtomatis', 'kategoris', 'kondisis', 'ruangs'));
     }
 
     public function store(Request $request)
@@ -138,5 +172,24 @@ class BarangController extends Controller
         ]);
 
         return redirect()->route('barang.index')->with('success', 'Data barang berhasil diperbarui!');
+    }
+    public function show($kode_barang)
+    {
+        // Cari barang berdasarkan kode_barang, bukan berdasarkan ID
+        $barang = Barang::with(['kategori', 'kondisi', 'ruang'])
+            ->where('kode_barang', $kode_barang)
+            ->firstOrFail();
+
+        return view('barang.show', compact('barang'));
+    }
+
+    // Fungsi untuk cetak label Barcode
+    public function barcode($kode_barang)
+    {
+        // Cari barang berdasarkan kodenya
+        $barang = Barang::where('kode_barang', $kode_barang)->firstOrFail();
+
+        // Arahkan ke file tampilan cetak barcode
+        return view('barang.barcode', compact('barang'));
     }
 }

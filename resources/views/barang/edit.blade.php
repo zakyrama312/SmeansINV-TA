@@ -110,7 +110,7 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Kode Barang <span
                                     class="text-red-500">*</span></label>
                             <input type="text" name="kode_barang" value="{{ old('kode_barang', $barang->kode_barang) }}"
-                                required
+                                required readonly
                                 class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 shadow-sm">
                             @error('kode_barang') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                         </div>

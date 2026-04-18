@@ -70,9 +70,9 @@
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Password <span
                                     class="text-red-500">*</span></label>
-                            <input type="password" name="password" required minlength="8"
+                            <input type="password" name="password" required minlength="6"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition"
-                                placeholder="Minimal 8 karakter">
+                                placeholder="Minimal 6 karakter">
                         </div>
 
                         <div>

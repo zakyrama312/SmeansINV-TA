@@ -54,8 +54,24 @@ class PermintaanController extends Controller
             'jumlah'             => 'required|array',
         ]);
 
+
         DB::beginTransaction();
         try {
+            $nama_peminta = $request->nama_peminta;
+            $barang_ids = $request->barang_id; // Array ID barang yang diminta di keranjang
+
+            $belumHabis = DetailPermintaan::whereIn('barang_id', $barang_ids)
+                ->where('status_penggunaan', 'belum_habis')
+                ->whereHas('permintaan', function ($q) use ($nama_peminta) {
+                    // Cek apakah siswa dengan nama yang SAMA PERSIS masih punya barang tsb
+                    $q->where('nama_peminta', $nama_peminta)
+                        ->whereIn('status', ['pending', 'disetujui']);
+                })->first();
+
+            if ($belumHabis) {
+                $namaBarang = $belumHabis->barang->nama_barang ?? 'Barang ini';
+                return back()->with('error', "Akses Ditolak! Siswa atas nama '{$nama_peminta}' belum melaporkan '{$namaBarang}' habis dipakai. Silakan Lapor Habis di Dashboard terlebih dahulu!")->withInput();
+            }
             $permintaan = Permintaan::create([
                 'kode_transaksi'     => 'MINTA-' . date('Ymd') . '-' . Str::upper(Str::random(4)),
                 'nama_peminta'       => $request->nama_peminta,
@@ -133,5 +149,13 @@ class PermintaanController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal menolak: ' . $e->getMessage());
         }
+    }
+    // Fungsi khusus untuk Tombol Lapor Habis
+    public function laporHabis($id)
+    {
+        $detail = DetailPermintaan::findOrFail($id);
+        $detail->update(['status_penggunaan' => 'habis']);
+
+        return back()->with('success', 'Hebat! Barang berhasil dilaporkan habis. Kamu sekarang bisa meminta barang itu lagi jika butuh.');
     }
 }

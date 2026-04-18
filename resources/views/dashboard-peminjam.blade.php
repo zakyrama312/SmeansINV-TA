@@ -104,6 +104,61 @@ use Illuminate\Support\Facades\Auth; ?>
                 </div>
             </div>
 
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2 bg-indigo-100 rounded-lg text-indigo-600">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900">Bahan Habis Pakai Kelas Ini</h3>
+                        <p class="text-sm text-gray-500">Klik tombol "Lapor Habis" jika bahan tersebut sudah benar-benar habis digunakan.</p>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-600">
+                        <thead class="text-xs text-gray-500 uppercase bg-gray-50 border-b border-gray-200">
+                            <tr>
+                                <th class="py-4 px-4 font-semibold w-12 text-center">No</th>
+                                <th class="py-4 px-4 font-semibold">Nama Siswa</th>
+                                <th class="py-4 px-4 font-semibold">Bahan Dipakai</th>
+                                <th class="py-4 px-4 font-semibold text-center">Jumlah</th>
+                                <th class="py-4 px-4 font-semibold text-center">Aksi Pelaporan</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @forelse($bahanAktif as $item)
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="py-4 px-4 text-center">{{ $loop->iteration }}</td>
+                                <td class="py-4 px-4 font-bold text-gray-900">{{ $item->permintaan->nama_peminta }}</td>
+                                <td class="py-4 px-4 font-medium text-indigo-600">{{ $item->barang->nama_barang ?? 'Barang Dihapus' }}</td>
+                                <td class="py-4 px-4 text-center font-bold">{{ $item->jumlah }}</td>
+                                <td class="py-4 px-4 text-center">
+                                    <form action="{{ route('permintaan.lapor_habis', $item->id) }}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" onclick="return confirm('Yakin barang ini sudah habis digunakan oleh {{ $item->permintaan->nama_peminta }}?');" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-lg shadow-sm transition-colors">
+                                            Lapor Habis
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="5" class="py-12 text-center text-gray-500">
+                                    <svg class="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <p>Semua bahan habis pakai untuk kelas ini sudah dilaporkan selesai.</p>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </x-app-layout>
