@@ -6,12 +6,11 @@ use App\Http\Controllers\LaporanPeminjamanController;
 use App\Http\Controllers\LaporanPermintaanController;
 use App\Http\Controllers\LaporanRuangController;
 use App\Http\Controllers\PeminjamanController;
+
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::redirect('/', '/login');
 
 
 
@@ -40,7 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/permintaan', [App\Http\Controllers\PermintaanController::class, 'store'])->name('permintaan.store');
     Route::patch('/permintaan/{id}/approve', [App\Http\Controllers\PermintaanController::class, 'approve'])->name('permintaan.approve');
     Route::patch('/permintaan/{id}/reject', [App\Http\Controllers\PermintaanController::class, 'reject'])->name('permintaan.reject');
-    Route::patch('/permintaan/lapor-habis/{id}', [\App\Http\Controllers\PermintaanController::class, 'laporHabis'])->name('permintaan.lapor_habis');
+    Route::patch('/permintaan/lapor-habis/{id}', [App\Http\Controllers\PermintaanController::class, 'laporHabis'])->name('permintaan.lapor_habis');
 
     // Route Barang
     Route::resource('barang', BarangController::class);
@@ -60,6 +59,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/laporan/permintaan', [LaporanPermintaanController::class, 'index'])->name('laporan.permintaan');
     Route::get('/laporan/permintaan/cetak', [LaporanPermintaanController::class, 'cetak'])->name('laporan.permintaan.cetak');
     Route::get('/laporan/permintaan/excel', [LaporanPermintaanController::class, 'excel'])->name('laporan.permintaan.excel');
+
+    // Laporan Pemakaian
+    Route::get('/laporan-pemakaian', [LaporanPermintaanController::class, 'laporanPemakaian'])->name('laporan.pemakaian');
+    Route::get('/laporan-pemakaian/cetak', [LaporanPermintaanController::class, 'cetakPemakaian'])->name('laporan.pemakaian.cetak');
+    Route::get('/laporan-pemakaian/excel', [LaporanPermintaanController::class, 'exportExcelPemakaian'])->name('laporan.pemakaian.excel');
+
     // Route Master Data
     Route::prefix('master')->group(function () {
         Route::resource('kategori', App\Http\Controllers\KategoriController::class)->except(['create', 'show', 'edit', 'update']);

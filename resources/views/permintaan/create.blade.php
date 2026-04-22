@@ -5,7 +5,7 @@
             <div class="flex justify-between items-center mb-8">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-900">Transaksi Permintaan Barang</h2>
-                    <p class="text-sm text-gray-500 mt-1">Sistem POS untuk Permintaan Bahan Habis Pakai Lab</p>
+                    <p class="text-sm text-gray-500 mt-1">Permintaan Bahan Habis Pakai Lab</p>
                 </div>
                 <a href="{{ route('permintaan.index') }}"
                     class="inline-flex items-center px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 shadow-sm transition-all">
@@ -43,26 +43,37 @@
                     <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
 
                         <div class="mb-5 bg-indigo-50 border border-indigo-100 p-4 rounded-xl">
-                            <label class="block text-sm font-bold text-indigo-900 mb-2">Scan Barcode Bahan/Barang</label>
+                            <label class="block text-sm font-bold text-indigo-900 mb-2">Scan Barcode
+                                Bahan/Barang</label>
                             <div class="flex gap-3">
                                 <div class="relative flex-grow">
                                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                        <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+                                        <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z">
+                                            </path>
                                         </svg>
                                     </div>
-                                    <input type="text" id="input-barcode" autofocus autocomplete="off" class="bg-white border border-indigo-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full pl-10 p-3 shadow-sm transition-all" placeholder="Tembak pakai alat scanner...">
+                                    <input type="text" id="input-barcode" autofocus autocomplete="off"
+                                        class="bg-white border border-indigo-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full pl-10 p-3 shadow-sm transition-all"
+                                        placeholder="Tembak pakai alat scanner...">
                                 </div>
-                                <button type="button" id="btn-open-camera" title="Gunakan Kamera/Webcam" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow-sm transition-colors flex items-center shrink-0">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8V6a2 2 0 0 1 2-2h2M3 16v2a2 2 0 0 0 2 2h2M21 8V6a2 2 0 0 0-2-2h-2M21 16v2a2 2 0 0 1-2 2h-2M8 12h8m-4-4v8"></path>
+                                <button type="button" id="btn-open-camera" title="Gunakan Kamera/Webcam"
+                                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow-sm transition-colors flex items-center shrink-0">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 8V6a2 2 0 0 1 2-2h2M3 16v2a2 2 0 0 0 2 2h2M21 8V6a2 2 0 0 0-2-2h-2M21 16v2a2 2 0 0 1-2 2h-2M8 12h8m-4-4v8">
+                                        </path>
                                     </svg>
                                 </button>
                             </div>
                         </div>
 
                         <div class="flex items-center justify-center mb-5">
-                            <span class="text-xs text-gray-400 font-bold uppercase tracking-wider">Atau Cari Manual</span>
+                            <span class="text-xs text-gray-400 font-bold uppercase tracking-wider">Atau Cari
+                                Manual</span>
                         </div>
 
                         <div class="flex flex-col sm:flex-row items-end gap-4">
@@ -72,8 +83,7 @@
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-indigo-500 block w-full p-3">
                                     <option value="" disabled selected>-- Ketik atau pilih barang --</option>
                                     @foreach($barangs as $barang)
-                                    <option value="{{ $barang->id }}"
-                                        data-nama="{{ $barang->nama_barang }}"
+                                    <option value="{{ $barang->id }}" data-nama="{{ $barang->nama_barang }}"
                                         data-kode="{{ $barang->kode_barang }}"
                                         data-stok="{{ $barang->jumlah_tersedia }}">
                                         {{ $barang->kode_barang }} - {{ $barang->nama_barang }} (Sisa:
@@ -94,7 +104,8 @@
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 flex-grow flex flex-col overflow-hidden">
+                    <div
+                        class="bg-white rounded-2xl shadow-sm border border-gray-200 flex-grow flex flex-col overflow-hidden">
                         <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white">
                             <h3 class="text-base font-bold text-gray-900">Daftar Barang Permintaan</h3>
                             <span id="badge-total"
@@ -121,7 +132,8 @@
                                     </svg>
                                 </div>
                                 <h4 class="text-gray-900 font-medium mb-1">Daftar permintaan kosong</h4>
-                                <p class="text-sm text-gray-500 text-center">Silakan scan barcode atau pilih barang manual.</p>
+                                <p class="text-sm text-gray-500 text-center">Silakan scan barcode atau pilih barang
+                                    manual.</p>
                             </div>
                         </div>
                     </div>
@@ -190,18 +202,23 @@
         </div>
     </div>
 
-    <div id="camera-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity">
+    <div id="camera-modal"
+        class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-indigo-50">
                 <h3 class="text-lg font-bold text-indigo-900 flex items-center">
                     <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8V6a2 2 0 0 1 2-2h2M3 16v2a2 2 0 0 0 2 2h2M21 8V6a2 2 0 0 0-2-2h-2M21 16v2a2 2 0 0 1-2 2h-2M8 12h8m-4-4v8"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 8V6a2 2 0 0 1 2-2h2M3 16v2a2 2 0 0 0 2 2h2M21 8V6a2 2 0 0 0-2-2h-2M21 16v2a2 2 0 0 1-2 2h-2M8 12h8m-4-4v8">
+                        </path>
                     </svg>
                     Kamera Scanner
                 </h3>
-                <button type="button" id="btn-close-camera" class="text-gray-400 hover:text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition-colors">
+                <button type="button" id="btn-close-camera"
+                    class="text-gray-400 hover:text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
                     </svg>
                 </button>
             </div>
@@ -290,7 +307,8 @@
             }
 
             function onScanFailure(error) {
-                /* Abaikan */ }
+                /* Abaikan */
+            }
 
             // LOGIKA INPUT SCAN BARCODE
             inputBarcode.addEventListener('keydown', function(e) {
@@ -323,8 +341,10 @@
             btnTambah.addEventListener('click', function() {
                 if (!selectBarang.value) return alert('Pilih barang!');
                 const barangId = selectBarang.value;
-                const namaBarang = selectBarang.options[selectBarang.selectedIndex].getAttribute('data-nama');
-                const stokTersedia = parseInt(selectBarang.options[selectBarang.selectedIndex].getAttribute('data-stok'));
+                const namaBarang = selectBarang.options[selectBarang.selectedIndex].getAttribute(
+                    'data-nama');
+                const stokTersedia = parseInt(selectBarang.options[selectBarang.selectedIndex].getAttribute(
+                    'data-stok'));
                 const jumlah = parseInt(inputJumlah.value);
 
                 if (jumlah > stokTersedia) {

@@ -158,4 +158,7 @@ class PermintaanController extends Controller
 
         return back()->with('success', 'Hebat! Barang berhasil dilaporkan habis. Kamu sekarang bisa meminta barang itu lagi jika butuh.');
     }
+
+    // Fungsi untuk menampilkan rekap bahan yang sudah habis dipakai
+
 }

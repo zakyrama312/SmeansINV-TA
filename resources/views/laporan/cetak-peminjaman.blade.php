@@ -10,40 +10,40 @@ use Illuminate\Support\Facades\Auth;
     <title>Cetak Laporan Peminjaman</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-    body {
-        font-family: 'Times New Roman', Times, serif;
-    }
-
-    .kir-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 11px;
-        margin-top: 15px;
-    }
-
-    .kir-table th,
-    .kir-table td {
-        border: 1px solid black;
-        padding: 6px 4px;
-    }
-
-    .kir-table th {
-        font-weight: bold;
-        text-align: center;
-        background-color: #f3f4f6;
-        -webkit-print-color-adjust: exact;
-    }
-
-    @media print {
-        @page {
-            size: landscape;
-            margin: 15mm;
-        }
-
         body {
-            -webkit-print-color-adjust: exact;
+            font-family: 'Times New Roman', Times, serif;
         }
-    }
+
+        .kir-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin-top: 15px;
+        }
+
+        .kir-table th,
+        .kir-table td {
+            border: 1px solid black;
+            padding: 6px 4px;
+        }
+
+        .kir-table th {
+            font-weight: bold;
+            text-align: center;
+            background-color: #f3f4f6;
+            print-color-adjust: exact;
+        }
+
+        @media print {
+            @page {
+                size: landscape;
+                margin: 15mm;
+            }
+
+            body {
+                print-color-adjust: exact;
+            }
+        }
     </style>
 </head>
 

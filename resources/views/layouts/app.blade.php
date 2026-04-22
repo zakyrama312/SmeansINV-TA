@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Auth;
         <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
 
             <header
-                class="bg-white border-b border-gray-200 shadow-sm h-16 flex items-center justify-between px-4 sm:px-6 shrink-0 z-10">
+                class="bg-white border-b border-gray-200 shadow-sm h-16 flex items-center justify-between px-4 sm:px-6 shrink-0 z-50">
 
                 <div class="flex items-center gap-4">
                     <button @click="sidebarOpen = !sidebarOpen"
@@ -53,7 +53,88 @@ use Illuminate\Support\Facades\Auth;
                     </button>
                 </div>
 
-                <div class="flex items-center">
+                <div class="flex items-center gap-2 sm:gap-4">
+
+                    @if(Auth::check() && in_array(Auth::user()->role, ['teknisi', 'kaprodi']))
+                    <div class="relative" x-data="{ openNotif: false }">
+                        <button @click="openNotif = !openNotif"
+                            class="relative p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors focus:outline-none">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
+                                </path>
+                            </svg>
+
+                            @if(isset($totalPending) && $totalPending > 0)
+                            <span
+                                class="absolute top-1.5 right-1.5 flex items-center justify-center w-4 h-4 text-[9px] font-bold text-white bg-red-500 border-2 border-white rounded-full shadow-sm">
+                                {{ $totalPending > 99 ? '99+' : $totalPending }}
+                            </span>
+                            @endif
+                        </button>
+
+                        <div x-show="openNotif" @click.away="openNotif = false" style="display: none;"
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+                            class="absolute right-0 top-full mt-3 w-80 bg-white rounded-xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.3)] border border-gray-100 z-[9999] overflow-hidden">
+
+                            <div
+                                class="px-4 py-3 border-b border-gray-50 flex justify-between items-center bg-gray-50/50">
+                                <h3 class="text-sm font-bold text-gray-900">Menunggu Persetujuan</h3>
+                                <span
+                                    class="text-xs font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-md">{{ $totalPending ?? 0 }}
+                                    Baru</span>
+                            </div>
+
+                            <div class="max-h-80 overflow-y-auto custom-scrollbar">
+                                @if(isset($totalPending) && $totalPending > 0)
+                                @if(isset($notifPeminjaman) && count($notifPeminjaman) > 0)
+                                @foreach($notifPeminjaman as $notif)
+                                <a href="{{ route('peminjaman.index') }}"
+                                    class="block px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-50 border-l-4 border-l-blue-500">
+                                    <p class="text-sm text-gray-800"><span
+                                            class="font-bold text-gray-900">{{ $notif->nama_peminjam }}</span>
+                                        mengajukan pinjaman alat.</p>
+                                    <p class="text-[11px] text-gray-400 mt-1 font-medium">
+                                        {{ $notif->created_at->diffForHumans() }}
+                                    </p>
+                                </a>
+                                @endforeach
+                                @endif
+
+                                @if(isset($notifPermintaan) && count($notifPermintaan) > 0)
+                                @foreach($notifPermintaan as $notif)
+                                <a href="{{ route('permintaan.index') }}"
+                                    class="block px-4 py-3 hover:bg-indigo-50 transition-colors border-b border-gray-50 border-l-4 border-l-indigo-500">
+                                    <p class="text-sm text-gray-800"><span
+                                            class="font-bold text-gray-900">{{ $notif->nama_peminta }}</span> meminta
+                                        bahan.</p>
+                                    <p class="text-[11px] text-gray-400 mt-1 font-medium">
+                                        {{ $notif->created_at->diffForHumans() }}
+                                    </p>
+                                </a>
+                                @endforeach
+                                @endif
+                                @else
+                                <div class="px-4 py-8 text-center text-gray-500">
+                                    <div
+                                        class="bg-gray-50 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <p class="text-sm font-medium text-gray-600">Semua pengajuan sudah beres!</p>
+                                    <p class="text-xs text-gray-400 mt-1">Tidak ada tugas ACC saat ini.</p>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button
