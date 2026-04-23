@@ -73,7 +73,7 @@ class PermintaanController extends Controller
                 return back()->with('error', "Akses Ditolak! Siswa atas nama '{$nama_peminta}' belum melaporkan '{$namaBarang}' habis dipakai. Silakan Lapor Habis di Dashboard terlebih dahulu!")->withInput();
             }
             $permintaan = Permintaan::create([
-                'kode_transaksi'     => 'MINTA-' . date('Ymd') . '-' . Str::upper(Str::random(4)),
+                'kode_transaksi'     => 'PMT-' . date('Ymd') . '-' . Str::upper(Str::random(4)),
                 'nama_peminta'       => $request->nama_peminta,
                 'kelas'              => $request->kelas,
                 'no_hp'              => $request->no_hp,

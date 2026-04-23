@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
 
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -182,22 +183,22 @@ use Illuminate\Support\Facades\Auth;
     </div>
 
     <style>
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 5px;
-        }
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 5px;
+    }
 
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-        }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
 
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 10px;
-        }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 10px;
+    }
 
-        .custom-scrollbar:hover::-webkit-scrollbar-thumb {
-            background: #475569;
-        }
+    .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+        background: #475569;
+    }
     </style>
 </body>
 

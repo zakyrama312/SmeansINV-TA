@@ -15,7 +15,7 @@ class BarangController extends Controller
     public function index()
     {
         // Mengambil data barang beserta relasinya
-        $barangs = Barang::with(['prodi', 'kategori', 'ruang', 'kondisi'])->latest()->get();
+        $barangs = Barang::with(['prodi', 'kategori', 'ruang', 'kondisi'])->latest()->paginate(10)->withQueryString();
         return view('barang.index', compact('barangs'));
     }
 

@@ -65,7 +65,7 @@ class PeminjamanController extends Controller
         DB::beginTransaction();
         try {
             $peminjaman = Peminjaman::create([
-                'kode_transaksi'  => 'PINJAM-' . date('Ymd') . '-' . Str::upper(Str::random(4)),
+                'kode_transaksi'  => 'PMJ-' . date('Ymd') . '-' . Str::upper(Str::random(4)),
                 'nama_peminjam'   => $request->nama_peminjam,
                 'kelas'           => $request->kelas,
                 'no_hp'           => $request->no_hp,
