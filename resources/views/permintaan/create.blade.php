@@ -1,14 +1,37 @@
 <x-app-layout>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+    /* Modifikasi style bawaan Select2 agar matching dengan Tailwind di form ini */
+    .select2-container .select2-selection--single {
+        height: 48px !important;
+        border-color: #d1d5db !important;
+        border-radius: 0.75rem !important;
+        display: flex !important;
+        align-items: center !important;
+        background-color: #f9fafb !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 46px !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #111827 !important;
+        line-height: 48px !important;
+        padding-left: 12px !important;
+    }
+    </style>
+
     <div class="py-12 bg-gray-50 min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-            <div class="flex justify-between items-center mb-8">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 px-4 sm:px-0">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-900">Transaksi Permintaan Barang</h2>
                     <p class="text-sm text-gray-500 mt-1">Permintaan Bahan Habis Pakai Lab</p>
                 </div>
                 <a href="{{ route('permintaan.index') }}"
-                    class="inline-flex items-center px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 shadow-sm transition-all">
+                    class="w-full sm:w-auto justify-center inline-flex items-center px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 shadow-sm transition-all">
                     <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
@@ -18,7 +41,8 @@
             </div>
 
             @if(session('success'))
-            <div class="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm flex items-center">
+            <div
+                class="mb-6 mx-4 sm:mx-0 bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg shadow-sm flex items-center">
                 <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                 </svg>
@@ -26,7 +50,8 @@
             </div>
             @endif
             @if(session('error'))
-            <div class="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm flex items-center">
+            <div
+                class="mb-6 mx-4 sm:mx-0 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm flex items-center">
                 <svg class="w-5 h-5 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -36,7 +61,7 @@
             @endif
 
             <form action="{{ route('permintaan.store') }}" method="POST" id="form-permintaan"
-                class="flex flex-col lg:flex-row gap-8">
+                class="flex flex-col lg:flex-row gap-8 px-4 sm:px-0">
                 @csrf
 
                 <div class="w-full lg:w-2/3 flex flex-col gap-6">
@@ -79,15 +104,15 @@
                         <div class="flex flex-col sm:flex-row items-end gap-4">
                             <div class="flex-grow w-full">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Nama Barang</label>
-                                <select id="select-barang"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-indigo-500 block w-full p-3">
-                                    <option value="" disabled selected>-- Ketik atau pilih barang --</option>
+                                <select id="select-barang" class="select2-barang w-full">
+                                    <option value="">-- Ketik atau pilih barang --</option>
                                     @foreach($barangs as $barang)
-                                    <option value="{{ $barang->id }}" data-nama="{{ $barang->nama_barang }}"
+                                    <option value="{{ $barang->id }}"
+                                        data-nama="{{ $barang->nama_barang }} {{ $barang->merk ? '('.$barang->merk.')' : '' }}"
                                         data-kode="{{ $barang->kode_barang }}"
                                         data-stok="{{ $barang->jumlah_tersedia }}">
-                                        {{ $barang->kode_barang }} - {{ $barang->nama_barang }} (Sisa:
-                                        {{ $barang->jumlah_tersedia }})
+                                        {{ $barang->nama_barang }} {{ $barang->merk }} -
+                                        {{ $barang->ruang->nama_ruang ?? 'Lab' }} (Sisa: {{ $barang->jumlah_tersedia }})
                                     </option>
                                     @endforeach
                                 </select>
@@ -95,10 +120,14 @@
                             <div class="w-full sm:w-32">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah</label>
                                 <input type="number" id="input-jumlah" min="1" value="1"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-indigo-500 block w-full p-3 text-center">
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-indigo-500 block w-full p-3 text-center h-[48px]">
                             </div>
                             <button type="button" id="btn-tambah"
-                                class="w-full sm:w-auto bg-gray-900 text-white hover:bg-gray-800 font-semibold py-3 px-6 rounded-xl transition-all shadow-sm">
+                                class="w-full sm:w-auto bg-[#10b981] hover:bg-emerald-600 text-white font-semibold h-[48px] px-6 rounded-xl transition-all shadow-sm flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
                                 Tambah
                             </button>
                         </div>
@@ -229,158 +258,167 @@
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const inputBarcode = document.getElementById('input-barcode');
-            const btnTambah = document.getElementById('btn-tambah');
-            const selectBarang = document.getElementById('select-barang');
-            const inputJumlah = document.getElementById('input-jumlah');
-            const tableKeranjang = document.getElementById('table-keranjang');
-            const emptyState = document.getElementById('empty-state');
-            const formPermintaan = document.getElementById('form-permintaan');
-            const badgeTotal = document.getElementById('badge-total');
+    $(document).ready(function() {
+        // Aktifkan Select2
+        $('.select2-barang').select2({
+            placeholder: "Ketik untuk mencari bahan..."
+        });
+    });
 
-            // Elemen Kamera
-            const btnOpenCamera = document.getElementById('btn-open-camera');
-            const btnCloseCamera = document.getElementById('btn-close-camera');
-            const cameraModal = document.getElementById('camera-modal');
-            let html5QrcodeScanner = null;
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputBarcode = document.getElementById('input-barcode');
+        const btnTambah = document.getElementById('btn-tambah');
+        const inputJumlah = document.getElementById('input-jumlah');
+        const tableKeranjang = document.getElementById('table-keranjang');
+        const emptyState = document.getElementById('empty-state');
+        const formPermintaan = document.getElementById('form-permintaan');
+        const badgeTotal = document.getElementById('badge-total');
 
-            let totalItemCount = 0;
+        // Elemen Kamera
+        const btnOpenCamera = document.getElementById('btn-open-camera');
+        const btnCloseCamera = document.getElementById('btn-close-camera');
+        const cameraModal = document.getElementById('camera-modal');
+        let html5QrcodeScanner = null;
 
-            function updateTotalBadge() {
-                badgeTotal.textContent = `${totalItemCount} Macam Barang`;
+        let totalItemCount = 0;
+
+        function updateTotalBadge() {
+            badgeTotal.textContent = `${totalItemCount} Macam Barang`;
+        }
+
+        // Cegah submit form saat enter di text input
+        formPermintaan.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                e.preventDefault();
             }
+        });
 
-            // Cegah submit form saat enter di text input
-            formPermintaan.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
-                    e.preventDefault();
-                }
-            });
-
-            // LOGIKA KAMERA SCANNER
-            btnOpenCamera.addEventListener('click', function() {
-                cameraModal.classList.remove('hidden');
-                cameraModal.classList.add('flex');
-                html5QrcodeScanner = new Html5QrcodeScanner(
-                    "reader", {
-                        fps: 10,
-                        qrbox: {
-                            width: 250,
-                            height: 250
-                        },
-                        aspectRatio: 1.0
+        // LOGIKA KAMERA SCANNER
+        btnOpenCamera.addEventListener('click', function() {
+            cameraModal.classList.remove('hidden');
+            cameraModal.classList.add('flex');
+            html5QrcodeScanner = new Html5QrcodeScanner(
+                "reader", {
+                    fps: 10,
+                    qrbox: {
+                        width: 250,
+                        height: 250
                     },
-                    false
-                );
-                html5QrcodeScanner.render(onScanSuccess, onScanFailure);
-            });
+                    aspectRatio: 1.0
+                }, false
+            );
+            html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+        });
 
-            function closeCamera() {
-                if (html5QrcodeScanner) {
-                    html5QrcodeScanner.clear().then(() => {
-                        cameraModal.classList.add('hidden');
-                        cameraModal.classList.remove('flex');
-                        inputBarcode.focus();
-                    });
-                } else {
+        function closeCamera() {
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.clear().then(() => {
                     cameraModal.classList.add('hidden');
-                }
-            }
-
-            btnCloseCamera.addEventListener('click', closeCamera);
-
-            function onScanSuccess(decodedText, decodedResult) {
-                closeCamera();
-                inputBarcode.value = decodedText;
-                const enterEvent = new KeyboardEvent('keydown', {
-                    key: 'Enter',
-                    code: 'Enter',
-                    keyCode: 13,
-                    which: 13,
-                    bubbles: true
+                    cameraModal.classList.remove('flex');
+                    inputBarcode.focus();
                 });
-                inputBarcode.dispatchEvent(enterEvent);
+            } else {
+                cameraModal.classList.add('hidden');
             }
+        }
 
-            function onScanFailure(error) {
-                /* Abaikan */
-            }
+        btnCloseCamera.addEventListener('click', closeCamera);
 
-            // LOGIKA INPUT SCAN BARCODE
-            inputBarcode.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    const scannedCode = this.value.trim().toLowerCase();
-                    if (!scannedCode) return;
-
-                    let foundOption = null;
-                    Array.from(selectBarang.options).forEach(option => {
-                        const kode = option.getAttribute('data-kode');
-                        if (kode && kode.toLowerCase() === scannedCode) {
-                            foundOption = option;
-                        }
-                    });
-
-                    if (foundOption) {
-                        selectBarang.value = foundOption.value;
-                        inputJumlah.value = 1;
-                        btnTambah.click();
-                    } else {
-                        alert(`Barang dengan kode barcode '${scannedCode}' tidak ditemukan!`);
-                    }
-                    this.value = '';
-                    this.focus();
-                }
+        function onScanSuccess(decodedText, decodedResult) {
+            closeCamera();
+            inputBarcode.value = decodedText;
+            const enterEvent = new KeyboardEvent('keydown', {
+                key: 'Enter',
+                code: 'Enter',
+                keyCode: 13,
+                which: 13,
+                bubbles: true
             });
+            inputBarcode.dispatchEvent(enterEvent);
+        }
 
-            // LOGIKA TAMBAH KE KERANJANG
-            btnTambah.addEventListener('click', function() {
-                if (!selectBarang.value) return alert('Pilih barang!');
-                const barangId = selectBarang.value;
-                const namaBarang = selectBarang.options[selectBarang.selectedIndex].getAttribute(
-                    'data-nama');
-                const stokTersedia = parseInt(selectBarang.options[selectBarang.selectedIndex].getAttribute(
-                    'data-stok'));
-                const jumlah = parseInt(inputJumlah.value);
+        function onScanFailure(error) {
+            /* Abaikan */
+        }
 
-                if (jumlah > stokTersedia) {
-                    alert(`Stok sisa: ${stokTersedia}`);
-                    inputBarcode.focus();
-                    return;
-                }
+        // LOGIKA INPUT SCAN BARCODE
+        inputBarcode.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const scannedCode = this.value.trim().toLowerCase();
+                if (!scannedCode) return;
 
-                // Cek jika barang sudah ada (Auto-increment)
-                const existingRow = document.querySelector(`tr[data-id="${barangId}"]`);
-                if (existingRow) {
-                    const inputHiddenJumlah = existingRow.querySelector('input[name="jumlah[]"]');
-                    const displayJumlah = existingRow.querySelector('.display-jumlah');
-                    let newQty = parseInt(inputHiddenJumlah.value) + jumlah;
-
-                    if (newQty > stokTersedia) {
-                        alert(`Gagal! Total scan melebihi stok. Sisa stok: ${stokTersedia}`);
-                        inputBarcode.focus();
-                        return;
+                let foundOptionId = null;
+                $('.select2-barang option').each(function() {
+                    const kode = $(this).attr('data-kode');
+                    if (kode && kode.toLowerCase() === scannedCode) {
+                        foundOptionId = $(this).val();
                     }
+                });
 
-                    inputHiddenJumlah.value = newQty;
-                    displayJumlah.textContent = newQty;
-                    selectBarang.value = '';
+                if (foundOptionId) {
+                    $('.select2-barang').val(foundOptionId).trigger('change');
                     inputJumlah.value = 1;
+                    btnTambah.click();
+                } else {
+                    alert(`Bahan dengan kode barcode '${scannedCode}' tidak ditemukan!`);
+                }
+                this.value = '';
+                this.focus();
+            }
+        });
+
+        // LOGIKA TAMBAH KE KERANJANG
+        btnTambah.addEventListener('click', function() {
+            const selectElement = $('.select2-barang');
+            const barangId = selectElement.val();
+
+            if (!barangId) return alert('Silakan pilih bahan terlebih dahulu!');
+
+            const selectedOption = selectElement.find('option:selected');
+            const namaBarang = selectedOption.attr('data-nama');
+            const stokTersedia = parseInt(selectedOption.attr('data-stok'));
+            const jumlah = parseInt(inputJumlah.value);
+
+            if (jumlah > stokTersedia) {
+                alert(`Stok sisa: ${stokTersedia}`);
+                inputBarcode.focus();
+                return;
+            }
+
+            // Cek jika bahan sudah ada di keranjang
+            const existingRow = document.querySelector(`tr[data-id="${barangId}"]`);
+            if (existingRow) {
+                const inputHiddenJumlah = existingRow.querySelector('input[name="jumlah[]"]');
+                const displayJumlah = existingRow.querySelector('.display-jumlah');
+                let newQty = parseInt(inputHiddenJumlah.value) + jumlah;
+
+                if (newQty > stokTersedia) {
+                    alert(`Gagal! Total request melebihi stok. Sisa stok: ${stokTersedia}`);
                     inputBarcode.focus();
                     return;
                 }
 
-                emptyState.style.display = 'none';
-                const tr = document.createElement('tr');
-                tr.setAttribute('data-id', barangId);
-                tr.classList.add('hover:bg-gray-50', 'transition-colors');
+                inputHiddenJumlah.value = newQty;
+                displayJumlah.textContent = newQty;
+                selectElement.val('').trigger('change');
+                inputJumlah.value = 1;
+                inputBarcode.focus();
+                return;
+            }
 
-                // Styling menggunakan warna Indigo
-                tr.innerHTML = `
+            emptyState.style.display = 'none';
+            const tr = document.createElement('tr');
+            tr.setAttribute('data-id', barangId);
+            tr.classList.add('hover:bg-gray-50', 'transition-colors');
+
+            // Styling menggunakan warna Indigo
+            tr.innerHTML = `
                     <td class="px-6 py-4 font-semibold text-gray-900">${namaBarang} <input type="hidden" name="barang_id[]" value="${barangId}"></td>
                     <td class="px-6 py-4 text-center">
                         <span class="display-jumlah px-3 py-1 bg-indigo-50 text-indigo-800 rounded-lg font-bold border border-indigo-200">${jumlah}</span>
@@ -391,29 +429,29 @@
                     </td>
                 `;
 
-                tr.querySelector('.btn-hapus').addEventListener('click', function() {
-                    tr.remove();
-                    totalItemCount--;
-                    updateTotalBadge();
-                    if (tableKeranjang.children.length === 0) emptyState.style.display = 'flex';
-                    inputBarcode.focus();
-                });
-
-                tableKeranjang.appendChild(tr);
-                totalItemCount++;
+            tr.querySelector('.btn-hapus').addEventListener('click', function() {
+                tr.remove();
+                totalItemCount--;
                 updateTotalBadge();
-
-                selectBarang.value = '';
-                inputJumlah.value = 1;
+                if (tableKeranjang.children.length === 0) emptyState.style.display = 'flex';
                 inputBarcode.focus();
             });
 
-            formPermintaan.addEventListener('submit', function(e) {
-                if (tableKeranjang.children.length === 0) {
-                    e.preventDefault();
-                    alert('Daftar masih kosong!');
-                }
-            });
+            tableKeranjang.appendChild(tr);
+            totalItemCount++;
+            updateTotalBadge();
+
+            selectElement.val('').trigger('change');
+            inputJumlah.value = 1;
+            inputBarcode.focus();
         });
+
+        formPermintaan.addEventListener('submit', function(e) {
+            if (tableKeranjang.children.length === 0) {
+                e.preventDefault();
+                alert('Daftar permintaan masih kosong!');
+            }
+        });
+    });
     </script>
 </x-app-layout>

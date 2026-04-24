@@ -2,9 +2,19 @@
 
 use Illuminate\Support\Str;
 ?>
-<aside class="flex flex-col bg-slate-900 text-white transition-all duration-300 ease-in-out shadow-xl z-20 shrink-0"
-    :class="sidebarOpen ? 'w-64' : 'w-20 hidden md:flex'">
-    <div class="flex items-center justify-between h-16 px-4 bg-slate-950/50 border-b border-slate-800">
+
+<div x-show="sidebarOpen" x-transition:enter="transition-opacity ease-linear duration-300"
+    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+    x-transition:leave="transition-opacity ease-linear duration-300" x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0" @click="if(window.innerWidth < 768) sidebarOpen = false"
+    class="fixed inset-0 bg-slate-900/80 z-50 md:hidden backdrop-blur-sm" style="display: none;">
+</div>
+
+<aside x-init="if(window.innerWidth < 768) sidebarOpen = false"
+    class="flex flex-col bg-slate-900 text-white transition-all duration-300 ease-in-out shadow-[4px_0_24px_rgba(0,0,0,0.5)] z-[60] shrink-0 h-full absolute md:relative"
+    :class="sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full md:translate-x-0 w-64 md:w-20'">
+
+    <div class="flex items-center justify-between h-16 px-4 bg-slate-950/50 border-b border-slate-800 shrink-0">
         <div class="flex items-center gap-3 overflow-hidden whitespace-nowrap">
             <div class="bg-blue-600 p-1.5 rounded-lg shrink-0">
                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -16,9 +26,17 @@ use Illuminate\Support\Str;
             <span x-show="sidebarOpen" x-transition.duration.300ms
                 class="font-bold text-lg tracking-wide text-white">LabFlow</span>
         </div>
+
+        <button @click="sidebarOpen = false"
+            class="md:hidden text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 focus:outline-none transition-colors"
+            x-show="sidebarOpen">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
     </div>
 
-    <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1.5 custom-scrollbar">
+    <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1.5 custom-scrollbar pb-24 md:pb-4">
 
         <p x-show="sidebarOpen" class="px-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2 mt-2">
             Utama</p>

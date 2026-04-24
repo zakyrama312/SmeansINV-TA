@@ -43,6 +43,10 @@ class PeminjamanController extends Controller
     {
         // Hanya tampilkan barang dari prodi siswa yang login & stok tersedia > 0
         $barangs = Barang::where('prodi_id', Auth::user()->prodi_id)
+            ->whereHas('kategori', function ($query) {
+                // Mengecualikan semua kategori yang mengandung kata "Bahan"
+                $query->where('nama_kategori', 'NOT LIKE', '%Bahan%');
+            })
             ->where('jumlah_tersedia', '>', 0)
             ->get();
 

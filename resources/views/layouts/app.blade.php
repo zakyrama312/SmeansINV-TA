@@ -176,29 +176,29 @@ use Illuminate\Support\Facades\Auth;
                 </div>
             </header>
 
-            <main class="flex-1 overflow-y-auto overflow-x-hidden bg-gray-50 relative">
+            <main class="flex-1 overflow-y-auto overflow-x-hidden bg-gray-50 relative px-4 sm:px-0">
                 {{ $slot }}
             </main>
         </div>
     </div>
 
     <style>
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 5px;
-    }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+        }
 
-    .custom-scrollbar::-webkit-scrollbar-track {
-        background: transparent;
-    }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
 
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #334155;
-        border-radius: 10px;
-    }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 10px;
+        }
 
-    .custom-scrollbar:hover::-webkit-scrollbar-thumb {
-        background: #475569;
-    }
+        .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
     </style>
 </body>
 

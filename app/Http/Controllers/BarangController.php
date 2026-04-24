@@ -85,7 +85,7 @@ class BarangController extends Controller
         }
 
         // Simpan data ke database
-        Barang::create([
+        $barang = Barang::create([
             'kode_barang'     => $request->kode_barang,
             'nama_barang'     => $request->nama_barang,
             'stok'            => $request->stok,
@@ -101,7 +101,8 @@ class BarangController extends Controller
             'prodi_id'        => Auth::user()->prodi_id,
         ]);
 
-        return redirect()->route('barang.index')->with('success', 'Barang berhasil ditambahkan ke inventaris!');
+        // return redirect()->route('barang.index')->with('success', 'Barang berhasil ditambahkan ke inventaris!');
+        return redirect()->back()->with('success', 'Barang "' . $barang->nama_barang . '" berhasil ditambahkan!');
     }
 
     public function edit($id)

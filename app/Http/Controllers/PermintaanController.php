@@ -37,6 +37,11 @@ class PermintaanController extends Controller
     public function create()
     {
         $barangs = Barang::where('prodi_id', Auth::user()->prodi_id)
+            ->whereHas('kategori', function ($query) {
+                // Pastikan di master data Kategori, kamu memberi nama yang ada kata "Bahan"
+                // Contoh: "Bahan Praktik", "Bahan Habis Pakai", "Bahan Jaringan"
+                $query->where('nama_kategori', 'LIKE', '%Bahan%');
+            })
             ->where('jumlah_tersedia', '>', 0)
             ->get();
         return view('permintaan.create', compact('barangs'));

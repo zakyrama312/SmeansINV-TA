@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Auth;
     <div x-data="{ openRejectModal: false, rejectUrl: '' }" class="py-8 bg-gray-50 min-h-screen relative">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 px-4 sm:px-0">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-900">Kelola Permintaan Barang</h2>
                     <p class="text-sm text-gray-500 mt-1">Sirkulasi pengeluaran bahan habis pakai laboratorium</p>
