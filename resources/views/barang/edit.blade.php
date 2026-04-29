@@ -129,7 +129,15 @@
                                 {{ $barang->jumlah_tersedia }})
                             </p>
                         </div>
-                        <div></div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tahun / Sumber Perolehan</label>
+                            <input type="text" name="tahun_pembuatan"
+                                value="{{ old('tahun_pembuatan', $barang->tahun_pembuatan) }}"
+                                class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 shadow-sm"
+                                placeholder="Contoh: BOS 2019 atau 2024">
+                            <p class="mt-1 text-xs text-gray-500 italic">*Bisa diisi tahun atau keterangan
+                                anggaran</p>
+                        </div>
                     </div>
 
                     <div class="mt-2">

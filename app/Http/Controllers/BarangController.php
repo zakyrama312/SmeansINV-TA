@@ -12,10 +12,21 @@ use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon; // Pastikan ini ada di bagian atas file
 class BarangController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $query = Barang::with(['kategori', 'kondisi', 'ruang']);
+        if ($request->filled('search')) {
+            $search = $request->search;
+            // Cari berdasarkan nama barang ATAU kode barang
+            $query->where('nama_barang', 'like', "%{$search}%")
+                ->orWhere('kode_barang', 'like', "%{$search}%");
+        }
         // Mengambil data barang beserta relasinya
-        $barangs = Barang::with(['prodi', 'kategori', 'ruang', 'kondisi'])->latest()->paginate(10)->withQueryString();
+        $barangs = $query
+            ->where('prodi_id', Auth::user()->prodi_id)
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
         return view('barang.index', compact('barangs'));
     }
 
@@ -75,6 +86,7 @@ class BarangController extends Controller
             'kondisi_id'  => 'required|exists:kondisis,id',
             'foto'        => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048', // Maksimal 2MB
             'merk'        => 'nullable|string|max:255',
+            'tahun_pembuatan' => 'nullable|string|max:50',
             'deskripsi'   => 'nullable|string',
         ]);
 
@@ -93,6 +105,7 @@ class BarangController extends Controller
             'jumlah_total'    => $request->stok, // Sesuai struktur barumu
             'deskripsi'       => $request->deskripsi,
             'merk'            => $request->merk,
+            'tahun_pembuatan' => $request->tahun_pembuatan,
             'foto'            => $fotoPath,
             'foto_thumbnail'  => $fotoPath, // Untuk saat ini kita pakai file yang sama, nanti bisa dioptimasi dengan image intervention jika perlu
             'kategori_id'     => $request->kategori_id,
@@ -133,6 +146,7 @@ class BarangController extends Controller
             'kondisi_id'  => 'required|exists:kondisis,id',
             'foto'        => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'merk'        => 'nullable|string|max:255',
+            'tahun_pembuatan' => 'nullable|string|max:50',
             'deskripsi'   => 'nullable|string',
         ]);
 
@@ -165,6 +179,7 @@ class BarangController extends Controller
             'jumlah_total'    => $request->stok,
             'deskripsi'       => $request->deskripsi,
             'merk'            => $request->merk,
+            'tahun_pembuatan' => $request->tahun_pembuatan,
             'foto'            => $fotoPath,
             'foto_thumbnail'  => $fotoPath,
             'kategori_id'     => $request->kategori_id,

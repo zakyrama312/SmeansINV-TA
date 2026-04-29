@@ -20,19 +20,17 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div class="relative">
+                    <form action="{{ route('barang.index') }}" method="GET" class="relative">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                         </div>
-                        <input type="text" id="searchInput"
-                            class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
-                            placeholder="Cari nama barang atau kode...">
-                    </div>
-
-
+                        <input type="text" name="search" value="{{ request('search') }}"
+                            class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 shadow-sm transition-all"
+                            placeholder="Ketik lalu tekan Enter untuk mencari...">
+                    </form>
                 </div>
 
                 <div class="overflow-x-auto">
@@ -182,22 +180,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchInput');
-            const rows = document.querySelectorAll('.barang-row');
 
-            searchInput.addEventListener('keyup', function(e) {
-                const term = e.target.value.toLowerCase();
-
-                rows.forEach(row => {
-                    const namaBarang = row.querySelector('.barang-name').textContent.toLowerCase();
-                    const kodeBarang = row.querySelector('.barang-kode').textContent.toLowerCase();
-
-                    if (namaBarang.includes(term) || kodeBarang.includes(term)) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            });
         });
     </script>
 </x-app-layout>

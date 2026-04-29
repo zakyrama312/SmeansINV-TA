@@ -1,24 +1,24 @@
 <x-app-layout>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
-        /* Modifikasi style bawaan Select2 agar matching dengan Tailwind */
-        .select2-container .select2-selection--single {
-            height: 42px !important;
-            border-color: #d1d5db !important;
-            border-radius: 0.5rem !important;
-            display: flex !important;
-            align-items: center !important;
-        }
+    /* Modifikasi style bawaan Select2 agar matching dengan Tailwind */
+    .select2-container .select2-selection--single {
+        height: 42px !important;
+        border-color: #d1d5db !important;
+        border-radius: 0.5rem !important;
+        display: flex !important;
+        align-items: center !important;
+    }
 
-        .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 40px !important;
-        }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 40px !important;
+    }
 
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            color: #111827 !important;
-            line-height: 42px !important;
-            padding-left: 12px !important;
-        }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #111827 !important;
+        line-height: 42px !important;
+        padding-left: 12px !important;
+    }
     </style>
 
     <div class="py-8 bg-gray-50 min-h-screen">
@@ -155,8 +155,16 @@
                                 placeholder="0">
                         </div>
 
-                        <div></div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tahun / Sumber Perolehan</label>
+                            <input type="text" name="tahun_pembuatan" value="{{ old('tahun_pembuatan') }}"
+                                class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 shadow-sm"
+                                placeholder="Contoh: BOS 2019 atau 2024">
+                            <p class="mt-1 text-xs text-gray-500 italic">*Bisa diisi tahun atau keterangan
+                                anggaran</p>
+                        </div>
                     </div>
+
 
                     <div class="mt-2">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
@@ -192,17 +200,17 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-        $(document).ready(function() {
-            // Aktifkan select2 pada dropdown
-            $('.select2-kategori').select2({
-                placeholder: "Ketik untuk mencari kategori..."
-            });
-            $('.select2-kondisi').select2({
-                placeholder: "Ketik untuk mencari kondisi..."
-            });
-            $('.select2-ruang').select2({
-                placeholder: "Ketik untuk mencari ruang..."
-            });
+    $(document).ready(function() {
+        // Aktifkan select2 pada dropdown
+        $('.select2-kategori').select2({
+            placeholder: "Ketik untuk mencari kategori..."
         });
+        $('.select2-kondisi').select2({
+            placeholder: "Ketik untuk mencari kondisi..."
+        });
+        $('.select2-ruang').select2({
+            placeholder: "Ketik untuk mencari ruang..."
+        });
+    });
     </script>
 </x-app-layout>

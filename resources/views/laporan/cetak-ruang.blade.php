@@ -84,12 +84,12 @@
                     <th class="w-48">Nama Barang</th>
                     <th class="w-32">Merk / Model</th>
                     <th class="w-40">Spesifikasi</th>
-                    <th class="w-16">Ukuran</th>
-                    <th class="w-16">Bahan</th>
-                    <th class="w-24">Tahun Pembuatan</th>
+                    <!-- <th class="w-16">Ukuran</th>
+                    <th class="w-16">Bahan</th> -->
+                    <th class="w-24">Tahun Pengadaan</th>
                     <th class="w-24">Kode Barang</th>
                     <th class="w-16">Jumlah Barang</th>
-                    <th class="w-24">Harga Beli</th>
+                    <!-- <th class="w-24">Harga Beli</th> -->
                     <th class="w-20">Keadaan Barang</th>
                     <th class="w-32">Keterangan</th>
                 </tr>
@@ -100,21 +100,21 @@
                     <td class="text-center">{{ $loop->iteration }}</td>
                     <td>{{ $item->nama_barang }}</td>
                     <td>{{ $item->merk ?? '-' }}</td>
-                    <td>{{ $item->spesifikasi ?? '-' }}</td>
-                    <td class="text-center">{{ $item->ukuran ?? '-' }}</td>
-                    <td class="text-center">{{ $item->bahan ?? '-' }}</td>
+                    <td>{{ $item->deskripsi ?? '-' }}</td>
+                    <!-- <td class="text-center">{{ $item->ukuran ?? '-' }}</td>
+                    <td class="text-center">{{ $item->bahan ?? '-' }}</td> -->
                     <td class="text-center">{{ $item->tahun_pembuatan ?? '-' }}</td>
                     <td class="text-center">{{ $item->kode_barang ?? '-' }}</td>
                     <td class="text-center font-bold">{{ $item->stok }}</td>
-                    <td class="text-right">
+                    <!-- <td class="text-right">
                         {{ $item->harga_beli ? 'Rp ' . number_format($item->harga_beli, 0, ',', '.') : '-' }}
-                    </td>
+                    </td> -->
                     <td class="text-center">{{ $item->kondisi->nama_kondisi ?? '-' }}</td>
                     <td>{{ $item->keterangan ?? '-' }}</td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="12" class="text-center py-8 italic text-gray-500">Belum ada data barang di ruangan ini.
+                    <td colspan="9" class="text-center py-8 italic text-gray-500">Belum ada data barang di ruangan ini.
                     </td>
                 </tr>
                 @endforelse
