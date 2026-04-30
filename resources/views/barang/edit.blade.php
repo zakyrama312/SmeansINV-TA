@@ -120,15 +120,50 @@
                                 class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 shadow-sm">
                         </div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah Total Stok <span
-                                    class="text-red-500">*</span></label>
-                            <input type="number" name="stok" value="{{ old('stok', $barang->stok) }}" required min="0"
-                                class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 shadow-sm">
-                            <p class="text-xs text-gray-500 mt-1">Stok saat ini: {{ $barang->stok }} (Tersedia:
-                                {{ $barang->jumlah_tersedia }})
-                            </p>
+                        <!-- Kolom Kiri: Gabungan Jumlah & Satuan -->
+                        <div class="flex gap-4">
+                            <div class="w-1/3">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah <span
+                                        class="text-red-500">*</span></label>
+                                <!-- Tambahkan $barang->stok agar jumlah lamanya muncul -->
+                                <input type="number" name="stok" value="{{ old('stok', $barang->stok) }}" required
+                                    min="0"
+                                    class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 shadow-sm"
+                                    placeholder="0">
+                            </div>
+                            <div class="w-2/3">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Satuan <span
+                                        class="text-red-500">*</span></label>
+                                <select name="satuan" required
+                                    class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 shadow-sm">
+                                    <option value="">-- Pilih Satuan --</option>
+                                    <!-- Tambahkan $barang->satuan di setiap opsi agar satuan lamanya otomatis terpilih -->
+                                    <option value="Unit"
+                                        {{ old('satuan', $barang->satuan) == 'Unit' ? 'selected' : '' }}>Unit
+                                        (Alat/Mesin)</option>
+                                    <option value="Pcs" {{ old('satuan', $barang->satuan) == 'Pcs' ? 'selected' : '' }}>
+                                        Pcs (Barang Satuan)</option>
+                                    <option value="Set" {{ old('satuan', $barang->satuan) == 'Set' ? 'selected' : '' }}>
+                                        Set (Satu Paket)</option>
+                                    <option value="Box" {{ old('satuan', $barang->satuan) == 'Box' ? 'selected' : '' }}>
+                                        Box / Kotak</option>
+                                    <option value="Roll"
+                                        {{ old('satuan', $barang->satuan) == 'Roll' ? 'selected' : '' }}>Roll
+                                        (Kabel/Timah)</option>
+                                    <option value="Rim" {{ old('satuan', $barang->satuan) == 'Rim' ? 'selected' : '' }}>
+                                        Rim (Kertas)</option>
+                                    <option value="Botol"
+                                        {{ old('satuan', $barang->satuan) == 'Botol' ? 'selected' : '' }}>Botol
+                                        (Cairan/Tinta)</option>
+                                    <option value="Pack"
+                                        {{ old('satuan', $barang->satuan) == 'Pack' ? 'selected' : '' }}>Pack (Bungkus)
+                                    </option>
+                                </select>
+                            </div>
                         </div>
+
+                        <!-- Kolom Kanan: Tahun / Sumber Perolehan -->
+
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Tahun / Sumber Perolehan</label>
                             <input type="text" name="tahun_pembuatan"

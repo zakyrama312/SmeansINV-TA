@@ -29,7 +29,7 @@ class PeminjamanController extends Controller
             $query->whereBetween('tanggal_pinjam', [$request->start_date, $request->end_date]);
         }
 
-        $peminjamans = $query->latest()->get();
+        $peminjamans = $query->orderBy('tanggal_pinjam', 'desc')->paginate(10)->withQueryString();
 
         // Hitung statistik untuk Widget Kartu (Tetap hitung semua data tanpa filter)
         $statPending   = Peminjaman::where('prodi_id', $prodiId)->where('status', 'pending')->count();

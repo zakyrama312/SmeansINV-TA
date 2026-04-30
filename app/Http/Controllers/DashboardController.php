@@ -59,7 +59,7 @@ class DashboardController extends Controller
         $permintaanData = [];
 
         for ($i = 5; $i >= 0; $i--) {
-            $date = Carbon::now()->subMonths($i);
+            $date = Carbon::now()->startOfMonth()->subMonths($i);
             $months[] = $date->translatedFormat('M Y');
 
             $peminjamanData[] = Peminjaman::where('prodi_id', $prodiId)

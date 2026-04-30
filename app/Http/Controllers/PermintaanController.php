@@ -24,7 +24,7 @@ class PermintaanController extends Controller
             $query->whereBetween('tanggal_permintaan', [$request->start_date, $request->end_date]);
         }
 
-        $permintaans = $query->latest()->get();
+        $permintaans = $query->orderBy('tanggal_permintaan', 'desc')->paginate(10)->withQueryString();
 
         // Hitung statistik (Hanya 3 kotak: Pending, Disetujui, Ditolak)
         $statPending   = Permintaan::where('prodi_id', $prodiId)->where('status', 'pending')->count();
@@ -93,6 +93,7 @@ class PermintaanController extends Controller
                     'permintaan_id' => $permintaan->id,
                     'barang_id'     => $barangId,
                     'jumlah'        => $request->jumlah[$key],
+                    'status_penggunaan' => 'belum_habis',
                 ]);
             }
 

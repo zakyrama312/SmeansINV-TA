@@ -17,9 +17,22 @@ class BarangController extends Controller
         $query = Barang::with(['kategori', 'kondisi', 'ruang']);
         if ($request->filled('search')) {
             $search = $request->search;
-            // Cari berdasarkan nama barang ATAU kode barang
-            $query->where('nama_barang', 'like', "%{$search}%")
-                ->orWhere('kode_barang', 'like', "%{$search}%");
+
+            $query->where(function ($q) use ($search) {
+                // 1. Cari di tabel barangs (Nama atau Kode)
+                $q->where('nama_barang', 'like', "%{$search}%")
+                    ->orWhere('kode_barang', 'like', "%{$search}%")
+
+                    // 2. Cari di tabel kategoris (Nama Kategori)
+                    ->orWhereHas('kategori', function ($qKategori) use ($search) {
+                        $qKategori->where('nama_kategori', 'like', "%{$search}%");
+                    })
+
+                    // (Opsional) 3. Cari di tabel ruang (Nama Ruang)
+                    ->orWhereHas('ruang', function ($qRuang) use ($search) {
+                        $qRuang->where('nama_ruang', 'like', "%{$search}%");
+                    });
+            });
         }
         // Mengambil data barang beserta relasinya
         $barangs = $query
@@ -67,8 +80,8 @@ class BarangController extends Controller
         $kodeBarangOtomatis = $singkatanProdi . '-' . $tahunBulan . '-' . str_pad($urut, 4, '0', STR_PAD_LEFT);
 
         // Tarik data relasi untuk form (Sesuaikan dengan variabel yang sudah ada di kodemu)
-        $kategoris = Kategori::all();
-        $kondisis = Kondisi::all();
+        $kategoris = Kategori::all()->where('prodi_id', $user->prodi_id);
+        $kondisis = Kondisi::all()->where('prodi_id', $user->prodi_id);
         $ruangs = Ruang::where('prodi_id', $user->prodi_id)->get();
 
         // Lempar variabel $kodeBarangOtomatis ke tampilan view
@@ -81,6 +94,7 @@ class BarangController extends Controller
             'kode_barang' => 'required|string|unique:barangs,kode_barang',
             'nama_barang' => 'required|string|max:255',
             'stok'        => 'required|integer|min:0',
+            'satuan' => 'required|string|max:30',
             'kategori_id' => 'required|exists:kategoris,id',
             'ruang_id'    => 'required|exists:ruangs,id',
             'kondisi_id'  => 'required|exists:kondisis,id',
@@ -101,6 +115,7 @@ class BarangController extends Controller
             'kode_barang'     => $request->kode_barang,
             'nama_barang'     => $request->nama_barang,
             'stok'            => $request->stok,
+            'satuan'          => $request->satuan,
             'jumlah_tersedia' => $request->stok, // Saat awal dibuat, jumlah tersedia otomatis sama dengan stok
             'jumlah_total'    => $request->stok, // Sesuai struktur barumu
             'deskripsi'       => $request->deskripsi,
@@ -141,6 +156,7 @@ class BarangController extends Controller
             'kode_barang' => 'required|string|unique:barangs,kode_barang,' . $barang->id,
             'nama_barang' => 'required|string|max:255',
             'stok'        => 'required|integer|min:0',
+            'satuan' => 'required|string|max:30',
             'kategori_id' => 'required|exists:kategoris,id',
             'ruang_id'    => 'required|exists:ruangs,id',
             'kondisi_id'  => 'required|exists:kondisis,id',
@@ -175,6 +191,7 @@ class BarangController extends Controller
             'kode_barang'     => $request->kode_barang,
             'nama_barang'     => $request->nama_barang,
             'stok'            => $request->stok,
+            'satuan'          => $request->satuan,
             'jumlah_tersedia' => $jumlahTersediaBaru,
             'jumlah_total'    => $request->stok,
             'deskripsi'       => $request->deskripsi,

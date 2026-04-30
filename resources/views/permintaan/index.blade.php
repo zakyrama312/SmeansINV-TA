@@ -280,6 +280,9 @@ use Illuminate\Support\Facades\Auth;
                         </tbody>
                     </table>
                 </div>
+                <div class="mt-6 pt-4 border-t border-gray-100">
+                    {{ $permintaans->links('vendor.pagination.custom') }}
+                </div>
             </div>
 
         </div>

@@ -102,13 +102,14 @@
 
                             <div>
                                 <p class="text-sm font-semibold text-gray-500 mb-1">Total Stok Keseluruhan</p>
-                                <p class="text-base font-bold text-gray-900">{{ $barang->stok }} Unit</p>
+                                <p class="text-base font-bold text-gray-900">{{ $barang->stok }} {{ $barang->satuan }}
+                                </p>
                             </div>
 
                             <div>
                                 <p class="text-sm font-semibold text-gray-500 mb-1">Stok Sedang Keluar / Dipinjam</p>
                                 <p class="text-base font-bold text-red-600">
-                                    {{ $barang->stok - $barang->jumlah_tersedia }} Unit
+                                    {{ $barang->stok - $barang->jumlah_tersedia }} {{ $barang->satuan }}
                                 </p>
                             </div>
 
@@ -116,15 +117,15 @@
                                 <p class="text-sm font-semibold text-gray-500 mb-1">Spesifikasi Detail</p>
                                 <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
                                     <p class="text-sm text-gray-800 leading-relaxed">
-                                        {{ $barang->spesifikasi ?? 'Tidak ada spesifikasi khusus.' }}
+                                        {{ $barang->deskripsi ?? 'Tidak ada spesifikasi khusus.' }}
                                     </p>
                                 </div>
                             </div>
 
-                            <div class="sm:col-span-2">
+                            <!-- <div class="sm:col-span-2">
                                 <p class="text-sm font-semibold text-gray-500 mb-1">Keterangan Tambahan</p>
                                 <p class="text-sm text-gray-800">{{ $barang->keterangan ?? '-' }}</p>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="flex justify-end pt-6 border-t border-gray-100">

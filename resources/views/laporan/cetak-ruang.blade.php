@@ -105,7 +105,7 @@
                     <td class="text-center">{{ $item->bahan ?? '-' }}</td> -->
                     <td class="text-center">{{ $item->tahun_pembuatan ?? '-' }}</td>
                     <td class="text-center">{{ $item->kode_barang ?? '-' }}</td>
-                    <td class="text-center font-bold">{{ $item->stok }}</td>
+                    <td class="text-center font-bold">{{ $item->stok }} {{ $item->satuan }}</td>
                     <!-- <td class="text-right">
                         {{ $item->harga_beli ? 'Rp ' . number_format($item->harga_beli, 0, ',', '.') : '-' }}
                     </td> -->

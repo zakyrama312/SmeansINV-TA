@@ -46,7 +46,9 @@
                                 <td class="py-4 px-4 text-center">{{ $barangs->firstItem() + $index }}</td>
                                 <td class="py-4 px-4 font-medium text-gray-900">{{ $item->nama_barang }}</td>
                                 <td class="py-4 px-4">{{ $item->merk ?? '-' }}</td>
-                                <td class="py-4 px-4 text-center font-bold text-gray-900">{{ $item->stok }}</td>
+                                <td class="py-4 px-4 text-center font-bold text-gray-900">{{ $item->stok }}
+                                    {{ $item->satuan }}
+                                </td>
                                 <td class="py-4 px-4 text-center">{{ $item->kondisi->nama_kondisi ?? '-' }}</td>
                                 <td class="py-4 px-4 text-center">{{ $ruang->nama_ruang }}</td>
                                 <td class="py-4 px-4">{{ $item->keterangan ?? '-' }}</td>
