@@ -76,12 +76,25 @@ class DashboardController extends Controller
         $kondisis = Kondisi::where('prodi_id', $prodiId)->get();
         $kondisiLabels = [];
         $kondisiData = [];
+        $kondisiColors = []; // <-- Tambahkan array baru untuk menampung warna
+
+        // Bikin kamus warna (Huruf kecil semua agar seragam saat pencarian)
+        $colorMap = [
+            'Baik' => '#10B981',        // Hijau (Warna Tailwind emerald-500)
+            'Rusak' => '#EAB308',       // Merah (Warna Tailwind red-500)
+            'Rusak Berat' => '#EF4444', // Kuning (Warna Tailwind yellow-500)
+        ];
 
         foreach ($kondisis as $k) {
             $count = Barang::where('prodi_id', $prodiId)->where('kondisi_id', $k->id)->count();
             if ($count > 0) {
                 $kondisiLabels[] = $k->nama_kondisi;
                 $kondisiData[] = $count;
+                // Ambil nama kondisi, jadikan huruf kecil semua
+                $namaKondisi = strtolower(trim($k->nama_kondisi));
+
+                // Cek apakah ada di kamus warna, kalau tidak ada, beri warna abu-abu default
+                $kondisiColors[] = $colorMap[$namaKondisi] ?? '#9CA3AF';
             }
         }
 
@@ -94,7 +107,8 @@ class DashboardController extends Controller
             'peminjamanData',
             'permintaanData',
             'kondisiLabels',
-            'kondisiData'
+            'kondisiData',
+            'kondisiColors'
         ));
     }
 }

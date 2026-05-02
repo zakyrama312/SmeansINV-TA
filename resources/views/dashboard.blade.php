@@ -139,161 +139,168 @@ use Illuminate\Support\Facades\Auth; ?>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
 
-        // Jurus Pamungkas: Pakai tag PHP murni agar kebal dari Prettier VS Code
-        var bulanLabels = <?php echo json_encode($months); ?>;
-        var dataPeminjaman = <?php echo json_encode($peminjamanData); ?>;
-        var dataPermintaan = <?php echo json_encode($permintaanData); ?>;
+            // Jurus Pamungkas: Pakai tag PHP murni agar kebal dari Prettier VS Code
+            var bulanLabels = <?php echo json_encode($months); ?>;
+            var dataPeminjaman = <?php echo json_encode($peminjamanData); ?>;
+            var dataPermintaan = <?php echo json_encode($permintaanData); ?>;
 
-        if (document.querySelector("#chart-transaksi")) {
-            var optionsTransaksi = {
-                series: [{
-                    name: 'Peminjaman Alat',
-                    data: dataPeminjaman
-                }, {
-                    name: 'Permintaan Bahan',
-                    data: dataPermintaan
-                }],
-                chart: {
-                    type: 'bar',
-                    height: 300,
-                    toolbar: {
-                        show: false
+            if (document.querySelector("#chart-transaksi")) {
+                var optionsTransaksi = {
+                    series: [{
+                        name: 'Peminjaman Alat',
+                        data: dataPeminjaman
+                    }, {
+                        name: 'Permintaan Bahan',
+                        data: dataPermintaan
+                    }],
+                    chart: {
+                        type: 'bar',
+                        height: 300,
+                        toolbar: {
+                            show: false
+                        },
+                        fontFamily: 'Inter, sans-serif'
                     },
-                    fontFamily: 'Inter, sans-serif'
-                },
-                colors: ['#2563eb', '#6366f1'], // Blue & Indigo
-                plotOptions: {
-                    bar: {
-                        horizontal: false,
-                        columnWidth: '45%',
-                        borderRadius: 4,
+                    colors: ['#2563eb', '#6366f1'], // Blue & Indigo
+                    plotOptions: {
+                        bar: {
+                            horizontal: false,
+                            columnWidth: '45%',
+                            borderRadius: 4,
+                        },
                     },
-                },
-                dataLabels: {
-                    enabled: false
-                },
-                stroke: {
-                    show: true,
-                    width: 2,
-                    colors: ['transparent']
-                },
-                xaxis: {
-                    categories: bulanLabels,
-                    labels: {
-                        style: {
-                            colors: '#64748b'
+                    dataLabels: {
+                        enabled: false
+                    },
+                    stroke: {
+                        show: true,
+                        width: 2,
+                        colors: ['transparent']
+                    },
+                    xaxis: {
+                        categories: bulanLabels,
+                        labels: {
+                            style: {
+                                colors: '#64748b'
+                            }
+                        },
+                        axisBorder: {
+                            show: false
+                        },
+                        axisTicks: {
+                            show: false
                         }
                     },
-                    axisBorder: {
-                        show: false
-                    },
-                    axisTicks: {
-                        show: false
-                    }
-                },
-                yaxis: {
-                    labels: {
-                        style: {
-                            colors: '#64748b'
-                        }
-                    },
-                },
-                grid: {
-                    borderColor: '#f1f5f9',
-                    strokeDashArray: 4,
                     yaxis: {
-                        lines: {
-                            show: true
-                        }
-                    }
-                },
-                fill: {
-                    opacity: 1
-                },
-                tooltip: {
-                    y: {
-                        formatter: function(val) {
-                            return val + " Transaksi"
-                        }
-                    }
-                },
-                legend: {
-                    position: 'top',
-                    horizontalAlign: 'right'
-                }
-            };
-
-            var chartTransaksi = new ApexCharts(document.querySelector("#chart-transaksi"), optionsTransaksi);
-            chartTransaksi.render();
-        }
-
-        // 2. RENDER DONUT CHART (KONDISI BARANG)
-        <?php if(count($kondisiLabels) > 0): ?>
-        var labelKondisi = <?php echo json_encode($kondisiLabels); ?>;
-        var dataKondisi = <?php echo json_encode($kondisiData); ?>;
-
-        if (document.querySelector("#chart-kondisi")) {
-            var optionsKondisi = {
-                series: dataKondisi,
-                chart: {
-                    type: 'donut',
-                    height: 300,
-                    fontFamily: 'Inter, sans-serif'
-                },
-                labels: labelKondisi,
-                colors: ['#22c55e', '#ef4444', '#eab308', '#3b82f6', '#8b5cf6'],
-                plotOptions: {
-                    pie: {
-                        donut: {
-                            size: '75%',
-                            labels: {
-                                show: true,
-                                name: {
-                                    show: true,
-                                    fontSize: '14px',
-                                    color: '#64748b'
-                                },
-                                value: {
-                                    show: true,
-                                    fontSize: '24px',
-                                    fontWeight: 'bold',
-                                    color: '#0f172a',
-                                    formatter: function(val) {
-                                        return val + " Item"
-                                    }
-                                },
-                                total: {
-                                    show: true,
-                                    showAlways: true,
-                                    label: 'Total Jenis',
-                                    color: '#64748b'
-                                }
+                        labels: {
+                            style: {
+                                colors: '#64748b'
+                            }
+                        },
+                    },
+                    grid: {
+                        borderColor: '#f1f5f9',
+                        strokeDashArray: 4,
+                        yaxis: {
+                            lines: {
+                                show: true
                             }
                         }
+                    },
+                    fill: {
+                        opacity: 1
+                    },
+                    tooltip: {
+                        y: {
+                            formatter: function(val) {
+                                return val + " Transaksi"
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'top',
+                        horizontalAlign: 'right'
                     }
-                },
-                dataLabels: {
-                    enabled: false
-                },
-                stroke: {
-                    width: 0
-                },
-                legend: {
-                    position: 'bottom',
-                    horizontalAlign: 'center',
-                    markers: {
-                        radius: 12
-                    }
+                };
+
+                var chartTransaksi = new ApexCharts(document.querySelector("#chart-transaksi"), optionsTransaksi);
+                chartTransaksi.render();
+            }
+
+            // 2. RENDER DONUT CHART (KONDISI BARANG)
+            <?php if (count($kondisiLabels) > 0): ?>
+                var labelKondisi = <?php echo json_encode($kondisiLabels); ?>;
+                var dataKondisi = <?php echo json_encode($kondisiData); ?>;
+                // TAMBAHKAN BARIS INI UNTUK MENANGKAP WARNA DARI CONTROLLER
+                var warnaKondisi = <?php echo json_encode($kondisiColors); ?>;
+
+                if (document.querySelector("#chart-kondisi")) {
+                    var optionsKondisi = {
+                        series: dataKondisi,
+                        chart: {
+                            type: 'donut',
+                            height: 300,
+                            fontFamily: 'Inter, sans-serif'
+                        },
+                        labels: labelKondisi,
+
+                        // UBAH BARIS COLORS INI:
+                        // DARI: colors: ['#22c55e', '#ef4444', '#eab308', '#3b82f6', '#8b5cf6'],
+                        // MENJADI:
+                        colors: warnaKondisi,
+
+                        plotOptions: {
+                            pie: {
+                                donut: {
+                                    size: '75%',
+                                    labels: {
+                                        show: true,
+                                        name: {
+                                            show: true,
+                                            fontSize: '14px',
+                                            color: '#64748b'
+                                        },
+                                        value: {
+                                            show: true,
+                                            fontSize: '24px',
+                                            fontWeight: 'bold',
+                                            color: '#0f172a',
+                                            formatter: function(val) {
+                                                return val + " Item"
+                                            }
+                                        },
+                                        total: {
+                                            show: true,
+                                            showAlways: true,
+                                            label: 'Total Jenis',
+                                            color: '#64748b'
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        dataLabels: {
+                            enabled: false
+                        },
+                        stroke: {
+                            width: 0
+                        },
+                        legend: {
+                            position: 'bottom',
+                            horizontalAlign: 'center',
+                            markers: {
+                                radius: 12
+                            }
+                        }
+                    };
+
+                    var chartKondisi = new ApexCharts(document.querySelector("#chart-kondisi"), optionsKondisi);
+                    chartKondisi.render();
                 }
-            };
+            <?php endif; ?>
 
-            var chartKondisi = new ApexCharts(document.querySelector("#chart-kondisi"), optionsKondisi);
-            chartKondisi.render();
-        }
-        <?php endif; ?>
-
-    });
+        });
     </script>
 </x-app-layout>
