@@ -13,13 +13,13 @@ class UserController extends Controller
     public function index()
     {
         // Tampilkan user, bisa difilter sesuai prodi admin yang login jika perlu
-        $users = User::with('prodi')->latest()->get();
+        $users = User::with('prodi')->where('prodi_id', Auth::user()->prodi_id)->latest()->get();
         return view('users.index', compact('users'));
     }
 
     public function create()
     {
-        $prodis = Prodi::all();
+        $prodis = Prodi::where('id', Auth::user()->prodi_id)->get();
         return view('users.create', compact('prodis'));
     }
 

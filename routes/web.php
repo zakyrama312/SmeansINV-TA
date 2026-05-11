@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman.index');
     Route::get('/peminjaman/create', [PeminjamanController::class, 'create'])->name('peminjaman.create');
     Route::post('/peminjaman', [PeminjamanController::class, 'store'])->name('peminjaman.store');
+    Route::post('/peminjaman/import', [PeminjamanController::class, 'importExcel'])->name('peminjaman.import');
 
     // Route untuk Aksi Tombol Validasi
     Route::patch('/peminjaman/{id}/approve', [PeminjamanController::class, 'approve'])->name('peminjaman.approve');
@@ -74,6 +75,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('ruang', App\Http\Controllers\RuangController::class)->except(['create', 'show', 'edit', 'update']);
         Route::resource('kondisi', App\Http\Controllers\KondisiController::class)->except(['create', 'show', 'edit', 'update']);
     });
+
+    Route::post('/barang/import', [App\Http\Controllers\BarangController::class, 'importExcel'])->name('barang.import');
 });
 
 require __DIR__ . '/auth.php';

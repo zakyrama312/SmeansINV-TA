@@ -2,19 +2,51 @@
     <div class="py-8 bg-gray-50 min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-            <div class="flex justify-between items-center mb-8">
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-900">Kelola Barang</h2>
                     <p class="text-sm text-gray-500 mt-1">Manajemen data barang inventaris</p>
                 </div>
-                <a href="{{ route('barang.create') }}"
-                    class="inline-flex items-center px-4 py-2.5 bg-blue-600 rounded-lg font-semibold text-sm text-white hover:bg-blue-700 transition shadow-sm">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                    Tambah Barang
-                </a>
+
+                <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto items-center">
+
+                    <form action="{{ route('barang.import') }}" method="POST" enctype="multipart/form-data"
+                        class="w-full sm:w-auto">
+                        @csrf
+                        <div
+                            class="flex items-stretch shadow-sm rounded-lg overflow-hidden border border-gray-200 focus-within:ring-2 focus-within:ring-green-500/20 focus-within:border-green-500 transition-all">
+
+                            <input type="file" name="file_excel" id="file_excel" accept=".xlsx, .xls, .csv" required
+                                class="hidden"
+                                onchange="document.getElementById('file_name').innerText = this.files[0].name">
+
+                            <label for="file_excel"
+                                class="flex items-center px-4 py-2.5 bg-white hover:bg-gray-50 cursor-pointer text-sm font-medium text-gray-600 transition-colors border-r border-gray-200">
+                                <svg class="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                    </path>
+                                </svg>
+                                <span id="file_name" class="max-w-[130px] truncate">Pilih file Excel...</span>
+                            </label>
+
+                            <button type="submit"
+                                class="flex items-center px-4 py-2.5 bg-green-50 hover:bg-green-100 text-green-700 text-sm font-bold transition-colors">
+                                Import
+                            </button>
+                        </div>
+                    </form>
+
+                    <a href="{{ route('barang.create') }}"
+                        class="inline-flex items-center justify-center w-full sm:w-auto px-4 py-2.5 bg-blue-600 rounded-lg font-semibold text-sm text-white hover:bg-blue-700 transition shadow-sm shrink-0">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        Tambah Barang
+                    </a>
+                </div>
             </div>
 
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -85,14 +117,31 @@
                                     </span>
                                 </td>
                                 <td class="py-4 px-4 text-center">
+                                    @php
+                                    // Ambil nama kondisi dan ubah jadi huruf kecil semua biar aman saat dicek
+                                    $namaKondisi = strtolower($item->kondisi->nama_kondisi ?? '');
+
+                                    // Set warna default (Abu-abu) kalau kondisinya kosong/tidak terdaftar
+                                    $warnaKondisi = 'bg-gray-100 text-gray-700';
+
+                                    if ($namaKondisi == 'baik') {
+                                    $warnaKondisi = 'bg-green-100 text-green-700'; // Hijau
+                                    } elseif ($namaKondisi == 'kurang baik') {
+                                    $warnaKondisi = 'bg-yellow-100 text-yellow-700'; // Kuning
+                                    } elseif ($namaKondisi == 'rusak berat') {
+                                    $warnaKondisi = 'bg-red-100 text-red-700'; // Merah
+                                    }
+                                    @endphp
+
                                     <span
-                                        class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                                        class="inline-block px-3 py-1 rounded-full text-xs font-semibold {{ $warnaKondisi }}">
                                         {{ $item->kondisi->nama_kondisi ?? '-' }}
                                     </span>
                                 </td>
                                 <td class="py-4 px-4 text-center">
                                     <div class="text-gray-900"><span
-                                            class="font-bold">{{ $item->jumlah_tersedia }}</span> / {{ $item->stok }}
+                                            class="font-bold">{{ $item->jumlah_tersedia + $item->total_keluar_bahan }}</span>
+                                        / {{ $item->stok }}
                                     </div>
                                     @if($item->jumlah_tersedia < 5) <div
                                         class="text-xs text-orange-500 font-semibold mt-0.5">Sedikit
@@ -100,9 +149,20 @@
                 @endif
                 </td>
                 <td class="py-4 px-4 text-center">
+                    @php
+                    // Cek apakah kategorinya mengandung kata "Bahan"
+                    $isBahan = str_contains(strtolower($item->kategori->nama_kategori ?? ''), 'bahan');
+                    @endphp
+
+                    @if($isBahan)
                     <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+                        {{ $item->total_keluar_bahan ?? 0 }}
+                    </span>
+                    @else
+                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-orange-700">
                         {{ $item->stok - $item->jumlah_tersedia }}
                     </span>
+                    @endif
                 </td>
                 <td class="py-4 px-4 text-center">
                     <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
@@ -178,9 +238,9 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchInput = document.getElementById('searchInput');
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
 
-        });
+    });
     </script>
 </x-app-layout>

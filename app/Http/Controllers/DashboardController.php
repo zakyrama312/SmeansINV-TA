@@ -80,9 +80,9 @@ class DashboardController extends Controller
 
         // Bikin kamus warna (Huruf kecil semua agar seragam saat pencarian)
         $colorMap = [
-            'Baik' => '#10B981',        // Hijau (Warna Tailwind emerald-500)
-            'Rusak' => '#EAB308',       // Merah (Warna Tailwind red-500)
-            'Rusak Berat' => '#EF4444', // Kuning (Warna Tailwind yellow-500)
+            'baik' => '#10B981',        // Hijau (Warna Tailwind emerald-500)
+            'kurang baik' => '#EAB308',       // Merah (Warna Tailwind red-500)
+            'rusak berat' => '#EF4444', // Kuning (Warna Tailwind yellow-500)
         ];
 
         foreach ($kondisis as $k) {

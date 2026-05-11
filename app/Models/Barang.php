@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\DetailPeminjaman;
+use App\Models\DetailPermintaan;
 use Illuminate\Database\Eloquent\Model;
 
 class Barang extends Model
@@ -34,5 +35,11 @@ class Barang extends Model
     public function detailPeminjamans()
     {
         return $this->hasMany(DetailPeminjaman::class);
+    }
+
+    // Tambahkan kode ini agar Barang bisa menghitung total permintaannya
+    public function detailPermintaans()
+    {
+        return $this->hasMany(DetailPermintaan::class, 'barang_id');
     }
 }

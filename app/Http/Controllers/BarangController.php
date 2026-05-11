@@ -10,11 +10,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon; // Pastikan ini ada di bagian atas file
+use App\Imports\BarangImport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class BarangController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Barang::with(['kategori', 'kondisi', 'ruang']);
+        $prodiId = Auth::user()->prodi_id;
+        $query = Barang::with(['kategori', 'kondisi', 'ruang'])
+            // Tambahkan ini: Menghitung total jumlah dari detail_permintaans yang status permintaannya 'disetujui'
+            ->withSum(['detailPermintaans as total_keluar_bahan' => function ($query) {
+                $query->whereHas('permintaan', function ($q) {
+                    $q->where('status', 'disetujui');
+                });
+            }], 'jumlah')
+            ->where('prodi_id', $prodiId);
+
         if ($request->filled('search')) {
             $search = $request->search;
 
@@ -224,5 +236,44 @@ class BarangController extends Controller
 
         // Arahkan ke file tampilan cetak barcode
         return view('barang.barcode', compact('barang'));
+    }
+
+    public function importExcel(Request $request)
+    {
+        // Validasi file yang diupload harus excel
+        $request->validate([
+            'file_excel' => 'required|mimes:xlsx,xls,csv|max:2048'
+        ]);
+
+        try {
+            // Eksekusi import
+            Excel::import(new BarangImport, $request->file('file_excel'));
+
+            return redirect()->back()->with('success', 'Hore! Data barang dari Excel berhasil diimpor.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal mengimpor data: ' . $e->getMessage());
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            // Cari barang berdasarkan ID, dan pastikan itu milik lab/prodi si Admin yang sedang login
+            $barang = Barang::where('id', $id)
+                ->where('prodi_id', Auth::user()->prodi_id)
+                ->firstOrFail();
+
+            // Kalau barang ini punya foto, hapus juga file fotonya dari storage biar hosting nggak penuh
+            if ($barang->foto) {
+                Storage::disk('public')->delete($barang->foto);
+            }
+
+            // Eksekusi hapus data dari database
+            $barang->delete();
+
+            return redirect()->back()->with('success', 'Hore! Data barang berhasil dihapus permanen.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Waduh, gagal menghapus barang: ' . $e->getMessage());
+        }
     }
 }

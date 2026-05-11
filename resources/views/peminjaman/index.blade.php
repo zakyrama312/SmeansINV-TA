@@ -5,25 +5,63 @@ use Illuminate\Support\Facades\Auth;
     <div x-data="{ openRejectModal: false, rejectUrl: '' }" class="py-8 bg-gray-50 min-h-screen relative">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4 px-4 sm:px-0">
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4">
+
                 <div>
                     <h2 class="text-2xl font-bold text-gray-900">Kelola Peminjaman</h2>
-                    <p class="text-sm text-gray-500 mt-1">Manajemen data peminjaman barang inventaris lab</p>
+                    <p class="text-sm text-gray-500 mt-1">Manajemen sirkulasi peminjaman alat laboratorium</p>
                 </div>
-                <a href="{{ route('peminjaman.create') }}"
-                    class="inline-flex items-center px-4 py-2 bg-blue-600 rounded-lg font-semibold text-sm text-white hover:bg-blue-700 transition shadow-sm">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                    Tambah Peminjaman
-                </a>
+
+                <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto items-center">
+
+                    <form action="{{ route('peminjaman.import') }}" method="POST" enctype="multipart/form-data"
+                        class="w-full sm:w-auto">
+                        @csrf
+                        <div
+                            class="flex items-stretch shadow-sm rounded-lg overflow-hidden border border-gray-200 focus-within:ring-2 focus-within:ring-green-500/20 focus-within:border-green-500 transition-all">
+
+                            <input type="file" name="file_excel" id="file_excel" accept=".xlsx, .xls, .csv" required
+                                class="hidden"
+                                onchange="document.getElementById('file_name').innerText = this.files[0].name">
+
+                            <label for="file_excel"
+                                class="flex items-center px-4 py-2.5 bg-white hover:bg-gray-50 cursor-pointer text-sm font-medium text-gray-600 transition-colors border-r border-gray-200">
+                                <svg class="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                    </path>
+                                </svg>
+                                <span id="file_name" class="max-w-[130px] truncate">Pilih file Excel...</span>
+                            </label>
+
+                            <button type="submit"
+                                class="flex items-center px-4 py-2.5 bg-green-50 hover:bg-green-100 text-green-700 text-sm font-bold transition-colors">
+                                Import
+                            </button>
+                        </div>
+                    </form>
+
+                    <a href="{{ route('peminjaman.create') }}"
+                        class="inline-flex items-center justify-center w-full sm:w-auto px-4 py-2.5 bg-blue-600 rounded-lg font-semibold text-sm text-white hover:bg-blue-700 transition shadow-sm shrink-0">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        Tambah Data
+                    </a>
+                </div>
             </div>
 
-            @if(session('success'))
-            <div
-                class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg shadow-sm font-medium">
+            @if (session('success'))
+            <div class="mb-6 p-4 text-sm text-green-700 bg-green-100 rounded-lg border border-green-200">
                 {{ session('success') }}
+            </div>
+            @endif
+
+            @if (session('error'))
+            <div class="mb-6 p-4 text-sm text-red-700 bg-red-100 rounded-lg border border-red-200">
+                {{ session('error') }}
             </div>
             @endif
 
